@@ -19,9 +19,9 @@ import (
 
 	"github.com/csats/kubeops/pkg/cluster"
 
-	"github.com/csats/coreos-kubernetes/multi-node/aws/pkg/cluster"
+	// "github.com/csats/coreos-kubernetes/multi-node/aws/pkg/cluster"
 	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v2"
+	// "gopkg.in/yaml.v2"
 )
 
 // clusterUpCmd represents the clusterUp command
@@ -35,7 +35,7 @@ var clusterUpCmd = &cobra.Command{
 func runClusterUp(cmd *cobra.Command, args []string) {
 	// TODO: Work your own magic here
 	fmt.Println("clusterUp called")
-	fmt.Printf("%v", cluster.New)
+	fmt.Printf("%v", cluster.FromConfig(args[0]))
 }
 
 func init() {
