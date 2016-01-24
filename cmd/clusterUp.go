@@ -1,4 +1,4 @@
-// Copyright © 2016 NAME HERE <EMAIL ADDRESS>
+// Copyright © 2016 C-SATS support@csats.com
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,9 +17,11 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/spf13/cobra"
+	"github.com/csats/kubeops/pkg/cluster"
 
 	"github.com/csats/coreos-kubernetes/multi-node/aws/pkg/cluster"
+	"github.com/spf13/cobra"
+	"gopkg.in/yaml.v2"
 )
 
 // clusterUpCmd represents the clusterUp command
