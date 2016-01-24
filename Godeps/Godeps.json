@@ -8,6 +8,61 @@
 			"Rev": "056c9bc7be7190eaa7715723883caffa5f8fa3e4"
 		},
 		{
+			"ImportPath": "github.com/aws/aws-sdk-go/aws",
+			"Comment": "v0.9.5-1-g34eb9e6",
+			"Rev": "34eb9e6629c9e23f3b602e7457def16ff10f4128"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/internal/endpoints",
+			"Comment": "v0.9.5-1-g34eb9e6",
+			"Rev": "34eb9e6629c9e23f3b602e7457def16ff10f4128"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/internal/protocol/ec2query",
+			"Comment": "v0.9.5-1-g34eb9e6",
+			"Rev": "34eb9e6629c9e23f3b602e7457def16ff10f4128"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/internal/protocol/query",
+			"Comment": "v0.9.5-1-g34eb9e6",
+			"Rev": "34eb9e6629c9e23f3b602e7457def16ff10f4128"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/internal/protocol/rest",
+			"Comment": "v0.9.5-1-g34eb9e6",
+			"Rev": "34eb9e6629c9e23f3b602e7457def16ff10f4128"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/internal/protocol/xml/xmlutil",
+			"Comment": "v0.9.5-1-g34eb9e6",
+			"Rev": "34eb9e6629c9e23f3b602e7457def16ff10f4128"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/internal/signer/v4",
+			"Comment": "v0.9.5-1-g34eb9e6",
+			"Rev": "34eb9e6629c9e23f3b602e7457def16ff10f4128"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/service/cloudformation",
+			"Comment": "v0.9.5-1-g34eb9e6",
+			"Rev": "34eb9e6629c9e23f3b602e7457def16ff10f4128"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/service/ec2",
+			"Comment": "v0.9.5-1-g34eb9e6",
+			"Rev": "34eb9e6629c9e23f3b602e7457def16ff10f4128"
+		},
+		{
+			"ImportPath": "github.com/coreos/coreos-kubernetes/multi-node/aws/pkg/coreosutil",
+			"Comment": "v0.3.0-28-gfe3f2fa",
+			"Rev": "fe3f2faff4b5b83354960089626ed0d642b5e5a8"
+		},
+		{
+			"ImportPath": "github.com/csats/coreos-kubernetes/multi-node/aws/pkg/cluster",
+			"Comment": "v0.3.0-28-gfe3f2fa",
+			"Rev": "fe3f2faff4b5b83354960089626ed0d642b5e5a8"
+		},
+		{
 			"ImportPath": "github.com/hashicorp/hcl",
 			"Rev": "197e8d3cf42199cfd53cd775deb37f3637234635"
 		},
@@ -52,6 +107,10 @@
 		{
 			"ImportPath": "github.com/spf13/viper",
 			"Rev": "a212099cbe6fbe8d07476bfda8d2d39b6ff8f325"
+		},
+		{
+			"ImportPath": "github.com/vaughan0/go-ini",
+			"Rev": "a98ad7ee00ec53921f08832bc06ecf7fd600e6a1"
 		},
 		{
 			"ImportPath": "gopkg.in/fsnotify.v1",
