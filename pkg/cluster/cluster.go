@@ -16,20 +16,51 @@ package cluster
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 
 	corecluster "github.com/csats/coreos-kubernetes/multi-node/aws/pkg/cluster"
+	"gopkg.in/yaml.v2"
 )
+
+type Config struct {
+	AWSCoreOS corecluster.Config `yaml:"awsCoreOS"`
+}
 
 // type Cluster struct {
 // 	config corecluster.Config
 // }
 
 var FromConfig = func(file string) string {
-	cfg := corecluster.NewDefaultConfig("nope")
-	if err := corecluster.DecodeConfigFromFile(cfg, file); err != nil {
+	cfg := &Config{}
+	if err := DecodeConfigFromFile(cfg, file); err != nil {
 		log.Fatalf("Failed to decode cluster file: %s", err)
 	}
 	fmt.Printf("%v\n", cfg)
 	return ""
+}
+
+func (cfg *Config) Valid() error {
+	return cfg.AWSCoreOS.Valid()
+}
+
+func DecodeConfigFromFile(out *Config, loc string) error {
+	d, err := ioutil.ReadFile(loc)
+	if err != nil {
+		return fmt.Errorf("failed reading config file: %v", err)
+	}
+
+	return decodeConfigBytes(out, d)
+}
+
+func decodeConfigBytes(out *Config, d []byte) error {
+	if err := yaml.Unmarshal(d, &out); err != nil {
+		return fmt.Errorf("failed decoding config file: %v", err)
+	}
+
+	if err := out.Valid(); err != nil {
+		return fmt.Errorf("config file invalid: %v", err)
+	}
+
+	return nil
 }
