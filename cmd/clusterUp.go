@@ -16,6 +16,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/csats/kubeops/pkg/cluster"
 
@@ -34,8 +35,13 @@ var clusterUpCmd = &cobra.Command{
 
 func runClusterUp(cmd *cobra.Command, args []string) {
 	// TODO: Work your own magic here
-	fmt.Println("clusterUp called")
-	fmt.Printf("%v", cluster.FromConfig(args[0]))
+
+	c, err := cluster.FromConfig(args[0])
+	if err != nil {
+		fmt.Errorf("Error parsing config file: %v\n")
+		os.Exit(1)
+	}
+	c.Create()
 }
 
 func init() {

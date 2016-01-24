@@ -20,6 +20,8 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	"github.com/csats/kubeops/pkg/cluster"
 )
 
 var cfgFile string
@@ -49,6 +51,7 @@ func Execute() {
 }
 
 func init() {
+	cluster.PrintLogo()
 	cobra.OnInitialize(initConfig)
 
 	// Here you will define your flags and configuration settings.

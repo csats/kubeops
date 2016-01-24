@@ -17,11 +17,15 @@ package cluster
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
+	"os"
 
 	corecluster "github.com/csats/coreos-kubernetes/multi-node/aws/pkg/cluster"
 	"gopkg.in/yaml.v2"
 )
+
+type Cluster struct {
+	Config *Config
+}
 
 type Config struct {
 	AWSCoreOS corecluster.Config `yaml:"awsCoreOS"`
@@ -31,13 +35,12 @@ type Config struct {
 // 	config corecluster.Config
 // }
 
-var FromConfig = func(file string) string {
+var FromConfig = func(file string) (*Cluster, error) {
 	cfg := &Config{}
 	if err := DecodeConfigFromFile(cfg, file); err != nil {
-		log.Fatalf("Failed to decode cluster file: %s", err)
+		return nil, fmt.Errorf("couldn't unmarshal config file: %v", err)
 	}
-	fmt.Printf("%v\n", cfg)
-	return ""
+	return &Cluster{Config: cfg}, nil
 }
 
 func (cfg *Config) Valid() error {
@@ -62,5 +65,16 @@ func decodeConfigBytes(out *Config, d []byte) error {
 		return fmt.Errorf("config file invalid: %v", err)
 	}
 
+	return nil
+}
+
+func printParam(label, value string) {
+
+}
+
+func (c *Cluster) Create() error {
+	fmt.Printf("Creating cluster %s. Are you sure? Press enter to continue.\n", c.Config.AWSCoreOS.ClusterName)
+	var b []byte = make([]byte, 1)
+	os.Stdin.Read(b)
 	return nil
 }
