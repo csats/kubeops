@@ -6,9 +6,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/hashicorp/hcl/hcl/ast"
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/hashicorp/hcl/hcl/scanner"
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/hashicorp/hcl/hcl/token"
+	"github.com/hashicorp/hcl/hcl/ast"
+	"github.com/hashicorp/hcl/hcl/scanner"
+	"github.com/hashicorp/hcl/hcl/token"
 )
 
 type Parser struct {

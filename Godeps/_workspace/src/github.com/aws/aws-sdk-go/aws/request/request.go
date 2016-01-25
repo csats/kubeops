@@ -11,9 +11,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/aws/aws-sdk-go/aws"
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/aws/aws-sdk-go/aws/awsutil"
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/aws/aws-sdk-go/aws/service/serviceinfo"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awsutil"
+	"github.com/aws/aws-sdk-go/aws/service/serviceinfo"
 )
 
 // A Request is the service request to be made.

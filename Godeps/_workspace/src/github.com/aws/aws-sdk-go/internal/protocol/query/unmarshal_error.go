@@ -4,8 +4,8 @@ import (
 	"encoding/xml"
 	"io"
 
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/request"
 )
 
 type xmlErrorResponse struct {

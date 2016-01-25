@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/aws/aws-sdk-go/aws"
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/aws/aws-sdk-go/service/cloudformation"
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/aws/aws-sdk-go/service/ec2"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/cloudformation"
+	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
 func createStackAndWait(svc *cloudformation.CloudFormation, name, templateURL string, parameters []*cloudformation.Parameter) error {

@@ -3,13 +3,13 @@
 package cloudformation
 
 import (
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/aws/aws-sdk-go/aws"
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/aws/aws-sdk-go/aws/defaults"
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/aws/aws-sdk-go/aws/request"
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/aws/aws-sdk-go/aws/service"
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/aws/aws-sdk-go/aws/service/serviceinfo"
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/aws/aws-sdk-go/internal/protocol/query"
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/aws/aws-sdk-go/internal/signer/v4"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/defaults"
+	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/aws/service"
+	"github.com/aws/aws-sdk-go/aws/service/serviceinfo"
+	"github.com/aws/aws-sdk-go/internal/protocol/query"
+	"github.com/aws/aws-sdk-go/internal/signer/v4"
 )
 
 // AWS CloudFormation enables you to create and manage AWS infrastructure deployments

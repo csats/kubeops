@@ -1,7 +1,7 @@
 package credentials
 
 import (
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 )
 
 var (

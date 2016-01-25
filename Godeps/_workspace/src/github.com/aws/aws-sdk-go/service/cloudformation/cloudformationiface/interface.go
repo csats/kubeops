@@ -4,8 +4,8 @@
 package cloudformationiface
 
 import (
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/aws/aws-sdk-go/aws/request"
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/aws/aws-sdk-go/service/cloudformation"
+	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/service/cloudformation"
 )
 
 // CloudFormationAPI is the interface type for cloudformation.CloudFormation.

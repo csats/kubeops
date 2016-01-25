@@ -18,8 +18,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/spf13/cobra"
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/spf13/viper"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 func init() {

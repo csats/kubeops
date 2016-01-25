@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/hashicorp/hcl/hcl/ast"
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/hashicorp/hcl/hcl/token"
+	"github.com/hashicorp/hcl/hcl/ast"
+	"github.com/hashicorp/hcl/hcl/token"
 )
 
 const (

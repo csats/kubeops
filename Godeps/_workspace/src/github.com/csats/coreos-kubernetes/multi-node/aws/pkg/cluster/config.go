@@ -7,7 +7,7 @@ import (
 	"net"
 	"net/url"
 
-	"github.com/csats/kubeops/Godeps/_workspace/src/gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v2"
 )
 
 const (

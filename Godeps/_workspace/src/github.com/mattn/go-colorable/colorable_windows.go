@@ -11,7 +11,7 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/mattn/go-isatty"
+	"github.com/mattn/go-isatty"
 )
 
 const (

@@ -23,7 +23,7 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/csats/kubeops/Godeps/_workspace/src/github.com/spf13/viper"
+	"github.com/spf13/viper"
 )
 
 // var BaseDir = ""
