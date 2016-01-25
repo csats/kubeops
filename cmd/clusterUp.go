@@ -15,14 +15,15 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"os"
+	"path"
+
+	"github.com/spf13/cobra"
 
 	"github.com/csats/kubeops/pkg/cluster"
-
-	// "github.com/csats/coreos-kubernetes/multi-node/aws/pkg/cluster"
-	"github.com/spf13/cobra"
-	// "gopkg.in/yaml.v2"
+	"github.com/csats/kubeops/pkg/scripts"
 )
 
 // clusterUpCmd represents the clusterUp command
@@ -33,15 +34,64 @@ var clusterUpCmd = &cobra.Command{
 	Run:   runClusterUp,
 }
 
+// Returns true if the file exists.
+func fileExists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return true, err
+}
+
+func confirm() {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("Type 'yes' to proceed: ")
+	response, _ := reader.ReadString('\n')
+	if response != "yes\n" {
+		os.Exit(0)
+	}
+}
+
 func runClusterUp(cmd *cobra.Command, args []string) {
-	// TODO: Work your own magic here
 
 	c, err := cluster.FromConfig(args[0])
 	if err != nil {
 		fmt.Errorf("Error parsing config file: %v\n")
 		os.Exit(1)
 	}
-	c.Create()
+	clusterName := c.Config.AWSCoreOS.ClusterName
+	clusterExternalDNSName := c.Config.AWSCoreOS.ExternalDNSName
+	clusterControllerIP := c.Config.AWSCoreOS.ControllerIP
+
+	// Take care of secrets
+	clusterCertDir := path.Join(secretDir, clusterName)
+	exists, err := fileExists(clusterCertDir)
+	if err != nil {
+		fmt.Errorf("Error finding : %v\n")
+		os.Exit(1)
+	}
+	fmt.Printf("Using secret directory %s\n", clusterCertDir)
+	if exists {
+		fmt.Println(`That directory appears to already exist. That's fine, it probably just means you
+destroyed this cluster and now you're bringing up a new one. Proceed to overwrite
+keys?`)
+		confirm()
+		os.RemoveAll(clusterCertDir)
+	}
+	os.Mkdir(clusterCertDir, 0700)
+	scripts.Run("generate-keys.sh", clusterCertDir, clusterName, clusterExternalDNSName, clusterControllerIP)
+
+	// Make the dang thing
+	fmt.Printf("Creating cluster %s. Are you sure? Press enter to continue.\n", c.Config.AWSCoreOS.ClusterName)
+	var b []byte = make([]byte, 1)
+	os.Stdin.Read(b)
+	if err := c.Create(); err != nil {
+		fmt.Errorf("Error creating cluster: %v", err)
+		os.Exit(1)
+	}
 }
 
 func init() {

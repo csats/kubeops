@@ -17,7 +17,6 @@ package cluster
 import (
 	"fmt"
 	"io/ioutil"
-	"os"
 
 	corecluster "github.com/csats/coreos-kubernetes/multi-node/aws/pkg/cluster"
 	"gopkg.in/yaml.v2"
@@ -69,8 +68,5 @@ func decodeConfigBytes(out *Config, d []byte) error {
 }
 
 func (c *Cluster) Create() error {
-	fmt.Printf("Creating cluster %s. Are you sure? Press enter to continue.\n", c.Config.AWSCoreOS.ClusterName)
-	var b []byte = make([]byte, 1)
-	os.Stdin.Read(b)
 	return nil
 }

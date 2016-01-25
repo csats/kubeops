@@ -25,6 +25,7 @@ import (
 )
 
 var cfgFile string
+var secretDir string
 
 // This represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
@@ -59,6 +60,7 @@ func init() {
 	// will be global for your application.
 
 	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.kubeops.yaml)")
+	RootCmd.PersistentFlags().StringVar(&secretDir, "secret-dir", "", "directory that will contain your secret keys")
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	RootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
