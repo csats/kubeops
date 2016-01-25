@@ -13,6 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -o errexit
+set -o nounset
+set -o pipefail
+
 clusterName="$1"
 clusterMasterDNS="$2"
 clusterControllerIP="$3"
@@ -21,7 +25,7 @@ DAYS_VALID="3650" # Change me if you don't want all the stuff to work for ten ye
   confFile=$(mktemp)
 
   #######################################################
-  mildlyImportant "Generating Cluster Root CA keypair"
+  # mildlyImportant "Generating Cluster Root CA keypair"
   #######################################################
   openssl genrsa -out ca-key.pem 2048
   openssl req \
@@ -34,7 +38,7 @@ DAYS_VALID="3650" # Change me if you don't want all the stuff to work for ten ye
     -subj "/CN=kube-ca"
 
   #######################################################
-  mildlyImportant "Generating API Server Keypair"
+  # mildlyImportant "Generating API Server Keypair"
   #######################################################
   cat > "$confFile" << EOF
 [req]
@@ -74,7 +78,7 @@ EOF
     -extfile "$confFile"
 
   #######################################################
-  mildlyImportant "Generating Worker Keypair"
+  # mildlyImportant "Generating Worker Keypair"
   #######################################################
   cat > "$confFile" << EOF
 [req]
@@ -108,7 +112,7 @@ EOF
     -extfile "$confFile"
 
   #######################################################
-  mildlyImportant "Generating Admin Keypair"
+  # mildlyImportant "Generating Admin Keypair"
   #######################################################
   cat > "$confFile" << EOF
 [req]

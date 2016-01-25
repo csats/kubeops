@@ -15,19 +15,24 @@
 package cluster
 
 import (
+	"errors"
 	"fmt"
+	"github.com/aws/aws-sdk-go/aws"
 	"io/ioutil"
+	"path"
 
 	corecluster "github.com/csats/coreos-kubernetes/multi-node/aws/pkg/cluster"
 	"gopkg.in/yaml.v2"
 )
 
 type Cluster struct {
-	Config *Config
+	Config    *Config
+	SecretDir string
 }
 
 type Config struct {
-	AWSCoreOS corecluster.Config `yaml:"awsCoreOS"`
+	AWSCoreOS      corecluster.Config `yaml:"awsCoreOS"`
+	ArtifactBucket string             `yaml:"artifactBucket"`
 }
 
 // type Cluster struct {
@@ -43,6 +48,9 @@ var FromConfig = func(file string) (*Cluster, error) {
 }
 
 func (cfg *Config) Valid() error {
+	if cfg.ArtifactBucket == "" {
+		return errors.New("artifactBucket must be set")
+	}
 	return cfg.AWSCoreOS.Valid()
 }
 
@@ -67,6 +75,53 @@ func decodeConfigBytes(out *Config, d []byte) error {
 	return nil
 }
 
+func (c *Cluster) getSecretPath(file string) string {
+	return path.Join(c.SecretDir, file)
+}
+
+func (c *Cluster) GetStackTemplate() (string, error) {
+	// Render the template
+	return corecluster.StackTemplateBody(c.Config.AWSCoreOS.ArtifactURL)
+}
+
 func (c *Cluster) Create() error {
-	return nil
+	if c.SecretDir == "" {
+		return fmt.Errorf("Cluster requires SecretDir to be specified")
+	}
+	caCertPath := c.getSecretPath("ca.pem")
+	apiserverCertPath := c.getSecretPath("apiserver.pem")
+	apiserverKeyPath := c.getSecretPath("apiserver-key.pem")
+	workerCertPath := c.getSecretPath("worker.pem")
+	workerKeyPath := c.getSecretPath("worker-key.pem")
+	adminCertPath := c.getSecretPath("admin.pem")
+	adminKeyPath := c.getSecretPath("admin-key.pem")
+	tlsConfig := &corecluster.TLSConfig{
+		CACertFile:        caCertPath,
+		CACert:            mustReadFile(caCertPath),
+		APIServerCertFile: apiserverCertPath,
+		APIServerCert:     mustReadFile(apiserverCertPath),
+		APIServerKeyFile:  apiserverKeyPath,
+		APIServerKey:      mustReadFile(apiserverKeyPath),
+		WorkerCertFile:    workerCertPath,
+		WorkerCert:        mustReadFile(workerCertPath),
+		WorkerKeyFile:     workerKeyPath,
+		WorkerKey:         mustReadFile(workerKeyPath),
+		AdminCertFile:     adminCertPath,
+		AdminCert:         mustReadFile(adminCertPath),
+		AdminKeyFile:      adminKeyPath,
+		AdminKey:          mustReadFile(adminKeyPath),
+	}
+	core := corecluster.New(&c.Config.AWSCoreOS, newAWSConfig(&c.Config.AWSCoreOS))
+	return core.Create(tlsConfig)
+}
+
+func mustReadFile(loc string) []byte {
+	b, _ := ioutil.ReadFile(loc)
+	return b
+}
+
+func newAWSConfig(cfg *corecluster.Config) *aws.Config {
+	c := aws.NewConfig()
+	c = c.WithRegion(cfg.Region)
+	return c
 }

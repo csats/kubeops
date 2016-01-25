@@ -17,6 +17,7 @@ package cmd
 import (
 	"bufio"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path"
 
@@ -65,6 +66,7 @@ func runClusterUp(cmd *cobra.Command, args []string) {
 	clusterName := c.Config.AWSCoreOS.ClusterName
 	clusterExternalDNSName := c.Config.AWSCoreOS.ExternalDNSName
 	clusterControllerIP := c.Config.AWSCoreOS.ControllerIP
+	clusterArtifactBucket := c.Config.ArtifactBucket
 
 	// Take care of secrets
 	clusterCertDir := path.Join(secretDir, clusterName)
@@ -83,13 +85,29 @@ keys?`)
 	}
 	os.Mkdir(clusterCertDir, 0700)
 	scripts.Run("generate-keys.sh", clusterCertDir, clusterName, clusterExternalDNSName, clusterControllerIP)
+	c.SecretDir = clusterCertDir
+
+	// Generate the CloudFormation template
+	tmpl, err := c.GetStackTemplate()
+	if err != nil {
+		fmt.Printf("Error creating cluster: %v", err)
+		os.Exit(1)
+	}
+	if err := ioutil.WriteFile("artifacts/template.json", []byte(tmpl), 0644); err != nil {
+		fmt.Printf("Error writing template.json: %v", err)
+		os.Exit(1)
+	}
+
+	// Upload the artifacts
+	wd, _ := os.Getwd()
+	scripts.Run("upload-artifacts.sh", wd, clusterArtifactBucket, clusterName)
 
 	// Make the dang thing
 	fmt.Printf("Creating cluster %s. Are you sure? Press enter to continue.\n", c.Config.AWSCoreOS.ClusterName)
 	var b []byte = make([]byte, 1)
 	os.Stdin.Read(b)
 	if err := c.Create(); err != nil {
-		fmt.Errorf("Error creating cluster: %v", err)
+		fmt.Printf("Error creating cluster: %v", err)
 		os.Exit(1)
 	}
 }
