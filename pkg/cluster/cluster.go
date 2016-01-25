@@ -27,6 +27,7 @@ import (
 
 type Cluster struct {
 	Config    *Config
+	TLSFiles  *TLSFiles
 	SecretDir string
 }
 
@@ -35,16 +36,36 @@ type Config struct {
 	ArtifactBucket string             `yaml:"artifactBucket"`
 }
 
-// type Cluster struct {
-// 	config corecluster.Config
-// }
+type TLSFiles struct {
+	CACertFile        string
+	APIServerCertFile string
+	APIServerKeyFile  string
+	WorkerCertFile    string
+	WorkerKeyFile     string
+	AdminCertFile     string
+	AdminKeyFile      string
+}
 
 var FromConfig = func(file string) (*Cluster, error) {
-	cfg := &Config{}
-	if err := DecodeConfigFromFile(cfg, file); err != nil {
+	fmt.Printf("Decoding from %s\n", file)
+	c := &Cluster{
+		SecretDir: "./clusters",
+		Config:    &Config{},
+	}
+	if err := DecodeConfigFromFile(c.Config, file); err != nil {
 		return nil, fmt.Errorf("couldn't unmarshal config file: %v", err)
 	}
-	return &Cluster{Config: cfg}, nil
+	c.TLSFiles = &TLSFiles{
+		CACertFile:        c.getSecretPath("ca.pem"),
+		APIServerCertFile: c.getSecretPath("apiserver.pem"),
+		APIServerKeyFile:  c.getSecretPath("apiserver-key.pem"),
+		WorkerCertFile:    c.getSecretPath("worker.pem"),
+		WorkerKeyFile:     c.getSecretPath("worker-key.pem"),
+		AdminCertFile:     c.getSecretPath("admin.pem"),
+		AdminKeyFile:      c.getSecretPath("admin-key.pem"),
+	}
+	fmt.Printf("%v\n", c)
+	return c, nil
 }
 
 func (cfg *Config) Valid() error {
