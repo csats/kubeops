@@ -68,10 +68,6 @@ func decodeConfigBytes(out *Config, d []byte) error {
 	return nil
 }
 
-func printParam(label, value string) {
-
-}
-
 func (c *Cluster) Create() error {
 	fmt.Printf("Creating cluster %s. Are you sure? Press enter to continue.\n", c.Config.AWSCoreOS.ClusterName)
 	var b []byte = make([]byte, 1)
