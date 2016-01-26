@@ -57,7 +57,7 @@ func confirm() {
 }
 
 func runClusterUp(cmd *cobra.Command, args []string) {
-
+	cluster.PrintLogo()
 	c, err := cluster.FromConfig(args[0])
 	if err != nil {
 		fmt.Errorf("Error parsing config file: %v\n")

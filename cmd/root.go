@@ -16,7 +16,10 @@ package cmd
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
+	"path"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -26,6 +29,11 @@ import (
 
 var cfgFile string
 var secretDir string
+var clusterDir string
+var roleDir string
+var localDir string
+var localClusters []*cluster.Cluster
+var kubeconfigFile string
 
 // This represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
@@ -52,7 +60,6 @@ func Execute() {
 }
 
 func init() {
-	cluster.PrintLogo()
 	cobra.OnInitialize(initConfig)
 
 	// Here you will define your flags and configuration settings.
@@ -61,13 +68,44 @@ func init() {
 
 	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.kubeops.yaml)")
 	RootCmd.PersistentFlags().StringVar(&secretDir, "secret-dir", "", "directory that will contain your secret keys")
+	RootCmd.PersistentFlags().StringVar(&clusterDir, "cluster-dir", "./clusters", "path of your clusters directory")
+	RootCmd.PersistentFlags().StringVar(&roleDir, "role-dir", "./roles", "path of your roles directory")
+	RootCmd.PersistentFlags().StringVar(&localDir, "local-dir", "./.local", "path of your .local directory")
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	RootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
+func mustAbs(str string) string {
+	absPath, err := filepath.Abs(str)
+	if err != nil {
+		fmt.Printf("Error resolving absolute path: %s\n", err)
+		os.Exit(1)
+	}
+	return absPath
+}
+
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
+	localDir = mustAbs(localDir)
+	roleDir = mustAbs(roleDir)
+	clusterDir = mustAbs(clusterDir)
+	kubeconfigFile = path.Join(localDir, "kubeconfig")
+	files, err := ioutil.ReadDir(clusterDir)
+	if err != nil {
+		fmt.Println("Error reading cluster directory. Are you in the folder of your kubeops repo?")
+		fmt.Println("You can also manually specify the location with --cluster-dir=\"some-directory\"")
+		fmt.Printf("Error: %s", err)
+		os.Exit(1)
+	}
+	for _, f := range files {
+		c, err := cluster.FromConfig(path.Join(clusterDir, f.Name()))
+		if err != nil {
+			// fmt.Fprintf(os.Stderr, "Error parsing %s, skipping: %s\n", f.Name(), err)
+		} else {
+			localClusters = append(localClusters, c)
+		}
+	}
 	if cfgFile != "" { // enable ability to specify config file via flag
 		viper.SetConfigFile(cfgFile)
 	}

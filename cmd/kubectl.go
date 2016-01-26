@@ -16,6 +16,7 @@ package cmd
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -37,17 +38,15 @@ to quickly create a Cobra application.`,
 }
 
 func runKubectl(cmd *cobra.Command, args []string) {
-	c, err := cluster.FromConfig(args[0])
-	if err != nil {
-		fmt.Printf("Error getting cluster: %v\n", err)
-		os.Exit(1)
-	}
-	kubeconfig, err := cluster.GenerateKubeconfig([]*cluster.Cluster{c})
+	kubeconfig, err := cluster.GenerateKubeconfig(localClusters)
 	if err != nil {
 		fmt.Printf("Error generating kubeconfig: %v\n", err)
 		os.Exit(1)
 	}
-	fmt.Println(kubeconfig)
+	if err := ioutil.WriteFile(kubeconfigFile, []byte(kubeconfig), 0644); err != nil {
+		fmt.Printf("Error writing kubeconfig file: %v\n", err)
+		os.Exit(1)
+	}
 }
 
 func init() {

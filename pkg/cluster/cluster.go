@@ -47,7 +47,6 @@ type TLSFiles struct {
 }
 
 var FromConfig = func(file string) (*Cluster, error) {
-	fmt.Printf("Decoding from %s\n", file)
 	c := &Cluster{
 		SecretDir: "./clusters",
 		Config:    &Config{},
@@ -64,7 +63,6 @@ var FromConfig = func(file string) (*Cluster, error) {
 		AdminCertFile:     c.getSecretPath("admin.pem"),
 		AdminKeyFile:      c.getSecretPath("admin-key.pem"),
 	}
-	fmt.Printf("%v\n", c)
 	return c, nil
 }
 
